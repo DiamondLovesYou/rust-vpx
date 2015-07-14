@@ -1,0 +1,12 @@
+[package]
+name = "libvpx"
+version = "0.1.0"
+authors = ["Richard Diamond <wichard@vitalitystudios.com>"]
+
+[lib]
+name = "vpx"
+path = "src/lib/lib.rs"
+
+[dependencies.libvpx-sys]
+version = "*"
+path = "src/sys"
