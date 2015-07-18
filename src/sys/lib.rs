@@ -334,27 +334,51 @@ pub struct Union_Unnamed5 {
     pub _bindgen_data_: [u64; 16usize],
 }
 impl Union_Unnamed5 {
-    pub unsafe fn frame(&mut self) -> *mut Struct_Unnamed6 {
+    pub unsafe fn frame_mut(&mut self) -> *mut Struct_Unnamed6 {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
-    pub unsafe fn twopass_stats(&mut self) -> *mut vpx_fixed_buf_t {
+    pub unsafe fn frame_ref(&self) -> *const Struct_Unnamed6 {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
-    pub unsafe fn firstpass_mb_stats(&mut self) -> *mut vpx_fixed_buf_t {
+    pub unsafe fn twopass_stats_mut(&mut self) -> *mut vpx_fixed_buf_t {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
-    pub unsafe fn psnr(&mut self) -> *mut Struct_vpx_psnr_pkt {
+    pub unsafe fn twopass_stats_ref(&self) -> *const vpx_fixed_buf_t {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
-    pub unsafe fn raw(&mut self) -> *mut vpx_fixed_buf_t {
+    pub unsafe fn firstpass_mb_stats_mut(&mut self) -> *mut vpx_fixed_buf_t {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
-    pub unsafe fn pad(&mut self) -> *mut [::libc::c_char; 124usize] {
+    pub unsafe fn firstpass_mb_stats_ref(&self) -> *const vpx_fixed_buf_t {
+        let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
+        ::std::mem::transmute(raw.offset(0))
+    }
+    pub unsafe fn psnr_mut(&mut self) -> *mut Struct_vpx_psnr_pkt {
+        let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
+        ::std::mem::transmute(raw.offset(0))
+    }
+    pub unsafe fn psnr_ref(&self) -> *const Struct_vpx_psnr_pkt {
+        let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
+        ::std::mem::transmute(raw.offset(0))
+    }
+    pub unsafe fn raw_mut(&mut self) -> *mut vpx_fixed_buf_t {
+        let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
+        ::std::mem::transmute(raw.offset(0))
+    }
+    pub unsafe fn raw_ref(&self) -> *const vpx_fixed_buf_t {
+        let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
+        ::std::mem::transmute(raw.offset(0))
+    }
+    pub unsafe fn pad_mut(&mut self) -> *mut [::libc::c_char; 124usize] {
+        let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
+        ::std::mem::transmute(raw.offset(0))
+    }
+    pub unsafe fn pad_ref(&self) -> *const [::libc::c_char; 124usize] {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
