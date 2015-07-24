@@ -84,7 +84,7 @@ impl<'a> Drop for Image<'a> {
 pub struct Frame<'a> {
     data: &'a [u8],
     pub pts: ffi::vpx_codec_pts_t,
-    pub duration: u64,
+    pub duration: usize,
     pub flags: ffi::vpx_codec_frame_flags_t,
     pub partition_id: i32,
 }
@@ -117,7 +117,7 @@ impl<'a> From<&'a ffi::Struct_Unnamed6> for Frame<'a> {
         Frame {
             data: data,
             pts: v.pts,
-            duration: v.duration,
+            duration: v.duration as usize,
             flags: v.flags,
             partition_id: v.partition_id,
         }
