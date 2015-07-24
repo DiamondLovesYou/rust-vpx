@@ -45,7 +45,8 @@ pub enum Format {
     YUY2,
     YVYU,
     BGR24,
-    ARGB { le: bool, },
+    ARGB,
+    BGRA,
 
     YV12_VPX,
     I420_VPX,
@@ -78,8 +79,8 @@ impl Into<ffi::vpx_img_fmt_t> for Format {
             YUY2 => VPX_IMG_FMT_YUY2,
             YVYU => VPX_IMG_FMT_YVYU,
             BGR24 => VPX_IMG_FMT_BGR24,
-            ARGB { le: false, } => VPX_IMG_FMT_ARGB,
-            ARGB { le: true, } => VPX_IMG_FMT_ARGB_LE,
+            ARGB => VPX_IMG_FMT_ARGB,
+            BGRA => VPX_IMG_FMT_ARGB_LE,
 
             YV12_VPX => VPX_IMG_FMT_VPXYV12,
             I420_VPX => VPX_IMG_FMT_VPXI420,
