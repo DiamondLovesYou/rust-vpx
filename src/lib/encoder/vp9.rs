@@ -1,12 +1,14 @@
 use ffi;
 
-use {InternalInterface, Error};
+use {InternalInterface, Error, Kind};
+
+use std::ops::{Deref, DerefMut};
 
 pub struct Cfg(ffi::vpx_codec_enc_cfg_t);
 impl Default for Cfg {
     fn default() -> Cfg {
         let interface: Interface = Default::default();
-        let mut cfg: ffi::vpx_codec_ctx_t = Default::default();
+        let mut cfg: ffi::vpx_codec_enc_cfg_t = Default::default();
         let err = unsafe {
             ffi::vpx_codec_enc_config_default(interface.iface(),
                                               &mut cfg as *mut _,
@@ -22,7 +24,7 @@ impl AsRef<ffi::vpx_codec_enc_cfg_t> for Cfg {
     }
 }
 impl AsMut<ffi::vpx_codec_enc_cfg_t> for Cfg {
-    fn as_ref(&mut self) -> &mut ffi::vpx_codec_enc_cfg_t {
+    fn as_mut(&mut self) -> &mut ffi::vpx_codec_enc_cfg_t {
         &mut self.0
     }
 }
@@ -33,7 +35,6 @@ impl Deref for Cfg {
     }
 }
 impl DerefMut for Cfg {
-    type Target = ffi::vpx_codec_enc_cfg_t;
     fn deref_mut(&mut self) -> &mut ffi::vpx_codec_enc_cfg_t {
         &mut self.0
     }
@@ -52,15 +53,16 @@ impl ::Interface for Interface {
     fn kind(&self) -> Kind { Kind::Encoder }
 
     fn create(&self, cfg: <Self as ::Interface>::Cfg,
-              flags: u64) ->
+              flags: ffi::vpx_codec_flags_t) ->
         Result<<Self as ::Interface>::Context, Error>
     {
         let mut ctx: ffi::vpx_codec_ctx_t = Default::default();
         let err = unsafe {
             ffi::vpx_codec_enc_init_ver(&mut ctx as *mut _,
                                         self.iface(),
-                                        &cfg as *const _,
-                                        flags)
+                                        &cfg.0 as *const _,
+                                        flags as i64,
+                                        super::ENCODER_ABI_VERSION)
         };
         if err != 0 {
             Err(From::from(err))
@@ -71,7 +73,7 @@ impl ::Interface for Interface {
 }
 impl InternalInterface for Interface {
     fn iface(&self) -> *mut ffi::vpx_codec_iface_t {
-        &mut ffi::vpx_codec_vp9_cx_algo as *mut _
+        unsafe { &mut ffi::vpx_codec_vp9_cx_algo as *mut _ }
     }
 }
 

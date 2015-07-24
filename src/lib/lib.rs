@@ -6,6 +6,8 @@ use std::mem::transmute;
 
 extern crate vpx_sys as ffi;
 
+pub mod encoder;
+
 pub enum Error {
     Generic(u32),
     Mem,
@@ -103,7 +105,7 @@ impl Into<ffi::vpx_img_fmt_t> for Format {
     }
 }
 
-const IMAGE_ABI_VERSION: u32 = 3;
+const IMAGE_ABI_VERSION: i32 = 3;
 pub struct Image<'a>(ffi::vpx_image_t, Format, Cow<'a, [u8]>);
 
 impl<'a> Image<'a> {
@@ -192,7 +194,7 @@ impl<'a> From<&'a ffi::Struct_Unnamed6> for Frame<'a> {
     }
 }
 
-const CODEC_ABI_VERSION: u32 = IMAGE_ABI_VERSION + 3;
+const CODEC_ABI_VERSION: i32 = IMAGE_ABI_VERSION + 3;
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub enum Kind {
@@ -210,7 +212,7 @@ pub trait Interface: InternalInterface + Default {
     }
     fn kind(&self) -> Kind;
 
-    fn create(&self, cfg: <Self as Interface>::Cfg, flags: u64) ->
+    fn create(&self, cfg: <Self as Interface>::Cfg, flags: ffi::vpx_codec_flags_t) ->
         Result<<Self as Interface>::Context, Error>;
 }
 #[doc(hidden)]
