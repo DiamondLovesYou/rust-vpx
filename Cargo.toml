@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Richard Diamond <wichard@vitalitystudios.com>"]
 license = "MPL-2.0"
 repository = "https://github.com/DiamondLovesYou/rust-vpx"
-keywords = ["vp9", "vp8", "webm", "video encoder", "video decoder"]
+keywords = ["vp9", "vp8", "webm", "video-encoder", "video-decoder"]
 description = "Rust idiomatic wrapper to libvpx"
 
 [lib]
