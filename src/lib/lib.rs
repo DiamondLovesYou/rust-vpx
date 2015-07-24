@@ -33,10 +33,77 @@ impl From<u32> for Error {
 
 pub type Rect = ffi::vpx_image_rect_t;
 
-pub type Format = ffi::vpx_img_fmt_t;
+#[derive(Clone, Copy, Eq, PartialEq, Hash, Debug)]
+#[allow(non_camel_case_types)]
+pub enum Format {
+    RGB24,
+    RGB32 { le: bool, },
+    RGB565 { le: bool, },
+    RGB555 { le: bool, },
+
+    UYVY,
+    YUY2,
+    YVYU,
+    BGR24,
+    ARGB { le: bool, },
+
+    YV12_VPX,
+    I420_VPX,
+
+    YV12,
+
+    I420 { hi_bit_depth: bool },
+    I422 { hi_bit_depth: bool },
+    I440 { hi_bit_depth: bool },
+    I444 { hi_bit_depth: bool },
+
+    /// Should be named `444A`.
+    I444A,
+}
+impl Into<ffi::vpx_img_fmt_t> for Format {
+    fn into(self) -> ffi::vpx_img_fmt_t {
+        use Format::*;
+        use ffi::*;
+
+        match self {
+            RGB24 => VPX_IMG_FMT_RGB24,
+            RGB32 { le: false, } => VPX_IMG_FMT_RGB32,
+            RGB32 { le: true, } => VPX_IMG_FMT_RGB32_LE,
+            RGB565 { le: false, } => VPX_IMG_FMT_RGB565,
+            RGB565 { le: true, } => VPX_IMG_FMT_RGB565_LE,
+            RGB555 { le: false, } => VPX_IMG_FMT_RGB555,
+            RGB555 { le: true, } => VPX_IMG_FMT_RGB555_LE,
+
+            UYVY => VPX_IMG_FMT_UYVY,
+            YUY2 => VPX_IMG_FMT_YUY2,
+            YVYU => VPX_IMG_FMT_YVYU,
+            BGR24 => VPX_IMG_FMT_BGR24,
+            ARGB { le: false, } => VPX_IMG_FMT_ARGB,
+            ARGB { le: true, } => VPX_IMG_FMT_ARGB_LE,
+
+            YV12_VPX => VPX_IMG_FMT_VPXYV12,
+            I420_VPX => VPX_IMG_FMT_VPXI420,
+
+            YV12 => VPX_IMG_FMT_YV12,
+
+            I420 { hi_bit_depth: false } => VPX_IMG_FMT_I420,
+            I422 { hi_bit_depth: false } => VPX_IMG_FMT_I422,
+            I440 { hi_bit_depth: false } => VPX_IMG_FMT_I444,
+            I444 { hi_bit_depth: false } => VPX_IMG_FMT_I440,
+
+            I420 { hi_bit_depth: true } => VPX_IMG_FMT_I42016,
+            I422 { hi_bit_depth: true } => VPX_IMG_FMT_I42216,
+            I440 { hi_bit_depth: true } => VPX_IMG_FMT_I44416,
+            I444 { hi_bit_depth: true } => VPX_IMG_FMT_I44016,
+
+            /// Should be named `444A`.
+            I444A => VPX_IMG_FMT_444A,
+        }
+    }
+}
 
 const IMAGE_ABI_VERSION: u32 = 3;
-pub struct Image<'a>(ffi::vpx_image_t, Cow<'a, [u8]>);
+pub struct Image<'a>(ffi::vpx_image_t, Format, Cow<'a, [u8]>);
 
 impl<'a> Image<'a> {
     /// XXX this function doesn't check that `data` is long enough for the
@@ -48,14 +115,14 @@ impl<'a> Image<'a> {
         let mut t: ffi::vpx_image_t = Default::default();
         unsafe {
             ffi::vpx_img_wrap(&mut t as *mut _,
-                              fmt, width,
+                              fmt.into(), width,
                               height, stride,
                               data.as_ptr() as *mut _);
         };
-        Image(t, data)
+        Image(t, fmt, data)
     }
 
-    pub fn get_format(&self) -> Format { self.0.fmt.clone() }
+    pub fn get_format(&self) -> Format { self.1.clone() }
 
     pub fn set_rect(&mut self, rect: Rect) -> Result<(), ()> {
         let res = unsafe {
