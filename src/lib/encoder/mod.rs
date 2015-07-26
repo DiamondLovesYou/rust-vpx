@@ -1,13 +1,15 @@
 use ffi;
 use super::{Interface, Error, Frame, Image};
 
+use libc;
+
 pub mod vp9;
 
 const ENCODER_ABI_VERSION: i32 = super::CODEC_ABI_VERSION + 5;
 
-pub const DL_REALTIME: u32 = 1;
-pub const DL_GOOD_QUALITY: u32 = 1000000;
-pub const DL_BEST_QUALITY: u32 = 0;
+pub const DL_REALTIME: u64 = 1;
+pub const DL_GOOD_QUALITY: u64 = 1000000;
+pub const DL_BEST_QUALITY: u64 = 0;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct FrameFlags {
@@ -63,9 +65,9 @@ pub trait Encoder: InternalEncoder
             ffi::vpx_codec_encode(self.get_mut_ctx(),
                                   &image.0 as *const _,
                                   pts,
-                                  duration,
+                                  duration as libc::c_ulong,
                                   flags.into(),
-                                  deadline)
+                                  deadline as libc::c_ulong)
         };
         if res != 0 {
             Err(From::from(res))
@@ -76,7 +78,7 @@ pub trait Encoder: InternalEncoder
 
     /// Call once there are no more frames to encode.
     fn flush(&mut self,
-             pts: ffi::vpx_enc_frame_flags_t,
+             pts: ffi::vpx_codec_pts_t,
              duration: u64,
              flags: ffi::vpx_enc_frame_flags_t,
              deadline: u64) -> Result<(), Error>
@@ -84,8 +86,8 @@ pub trait Encoder: InternalEncoder
         let res = unsafe {
             ffi::vpx_codec_encode(self.get_mut_ctx(),
                                   0 as *const _,
-                                  pts, duration,
-                                  flags, deadline)
+                                  pts, duration as libc::c_ulong,
+                                  flags, deadline as libc::c_ulong)
         };
         if res == 0 {
             Ok(())

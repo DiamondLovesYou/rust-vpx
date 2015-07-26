@@ -61,7 +61,7 @@ impl ::Interface for Interface {
             ffi::vpx_codec_enc_init_ver(&mut ctx as *mut _,
                                         self.iface(),
                                         &cfg.0 as *const _,
-                                        flags as i64,
+                                        flags,
                                         super::ENCODER_ABI_VERSION)
         };
         if err != 0 {
@@ -78,6 +78,7 @@ impl InternalInterface for Interface {
 }
 
 pub struct Context(ffi::vpx_codec_ctx_t);
+unsafe impl Send for Context {}
 impl super::InternalEncoder for Context {
     fn get_ref_ctx(&self) -> *const ffi::vpx_codec_ctx_t {
         &self.0 as *const _

@@ -5,9 +5,11 @@ use std::ffi::{CStr};
 use std::mem::transmute;
 
 extern crate vpx_sys as ffi;
+extern crate libc;
 
 pub mod encoder;
 
+#[derive(Clone, Copy, Eq, PartialEq, Debug)]
 pub enum Error {
     Generic(u32),
     Mem,
@@ -153,8 +155,8 @@ impl<'a> Drop for Image<'a> {
 #[derive(Debug, Clone)]
 pub struct Frame<'a> {
     data: &'a [u8],
-    pub pts: ffi::vpx_codec_pts_t,
-    pub duration: usize,
+    pub pts: u64,
+    pub duration: u64,
     pub flags: ffi::vpx_codec_frame_flags_t,
     pub partition_id: i32,
 }
@@ -186,8 +188,8 @@ impl<'a> From<&'a ffi::Struct_Unnamed6> for Frame<'a> {
 
         Frame {
             data: data,
-            pts: v.pts,
-            duration: v.duration as usize,
+            pts: v.pts as u64,
+            duration: v.duration as u64,
             flags: v.flags,
             partition_id: v.partition_id,
         }
