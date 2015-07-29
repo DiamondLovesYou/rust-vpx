@@ -306,6 +306,12 @@ impl ::std::clone::Clone for Struct_vpx_fixed_buf {
 impl ::std::default::Default for Struct_vpx_fixed_buf {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+impl ::std::fmt::Debug for Struct_vpx_fixed_buf {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        write!(f, "Struct_vpx_fixed_buf {{ buf: `<pointer>`, sz: `{:?}`, }}",
+               self.sz)
+    }
+}
 pub type vpx_fixed_buf_t = Struct_vpx_fixed_buf;
 pub type vpx_codec_pts_t = int64_t;
 pub type vpx_codec_frame_flags_t = uint32_t;
@@ -438,7 +444,7 @@ impl ::std::default::Default for Struct_vpx_codec_enc_output_cx_cb_pair {
 pub type vpx_codec_priv_output_cx_pkt_cb_pair_t =
     Struct_vpx_codec_enc_output_cx_cb_pair;
 #[repr(C)]
-#[derive(Copy)]
+#[derive(Copy, Debug)]
 pub struct Struct_vpx_rational {
     pub num: ::libc::c_int,
     pub den: ::libc::c_int,
@@ -465,7 +471,7 @@ pub const VPX_KF_AUTO: ::libc::c_uint = 1;
 pub const VPX_KF_DISABLED: ::libc::c_uint = 0;
 pub type vpx_enc_frame_flags_t = ::libc::c_long;
 #[repr(C)]
-#[derive(Copy)]
+#[derive(Copy, Debug)]
 pub struct Struct_vpx_codec_enc_cfg {
     pub g_usage: ::libc::c_uint,
     pub g_threads: ::libc::c_uint,

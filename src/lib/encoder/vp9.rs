@@ -4,6 +4,7 @@ use {InternalInterface, Error, Kind};
 
 use std::ops::{Deref, DerefMut};
 
+#[derive(Debug)]
 pub struct Cfg(ffi::vpx_codec_enc_cfg_t);
 impl Default for Cfg {
     fn default() -> Cfg {
