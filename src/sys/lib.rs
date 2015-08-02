@@ -769,18 +769,6 @@ extern "C" {
     pub static mut vpx_codec_vp9_dx_algo: vpx_codec_iface_t;
 }
 extern "C" {
-    pub fn imaxabs(j: intmax_t) -> intmax_t;
-    pub fn imaxdiv(numer: intmax_t, denomer: intmax_t) -> imaxdiv_t;
-    pub fn strtoimax(arg1: *const ::libc::c_char,
-                     arg2: *mut *mut ::libc::c_char, arg3: ::libc::c_int)
-     -> intmax_t;
-    pub fn strtoumax(arg1: *const ::libc::c_char,
-                     arg2: *mut *mut ::libc::c_char, arg3: ::libc::c_int)
-     -> uintmax_t;
-    pub fn wcstoimax(arg1: *const wchar_t, arg2: *mut *mut wchar_t,
-                     arg3: ::libc::c_int) -> intmax_t;
-    pub fn wcstoumax(arg1: *const wchar_t, arg2: *mut *mut wchar_t,
-                     arg3: ::libc::c_int) -> uintmax_t;
     pub fn vpx_img_alloc(img: *mut vpx_image_t, fmt: vpx_img_fmt_t,
                          d_w: ::libc::c_uint, d_h: ::libc::c_uint,
                          align: ::libc::c_uint) -> *mut vpx_image_t;
