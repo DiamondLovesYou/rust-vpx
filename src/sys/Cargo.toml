@@ -1,6 +1,6 @@
 [package]
 name = "libvpx-sys"
-version = "1.4.1"
+version = "1.4.2"
 authors = ["Richard Diamond <wichard@vitalitystudios.com>"]
 license = "MPL-2.0"
 repository = "https://github.com/DiamondLovesYou/rust-vpx"
