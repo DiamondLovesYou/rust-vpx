@@ -107,6 +107,29 @@ impl Into<ffi::vpx_img_fmt_t> for Format {
     }
 }
 
+#[derive(Clone, Copy, Eq, PartialEq, Hash, Debug)]
+#[allow(non_camel_case_types)]
+pub enum ColorSpace {
+    BT601,
+    BT709,
+    SMPTE170,
+    SMPTE240,
+    BT2020,
+    SRGB,
+}
+impl Into<ffi::vpx_color_space_t> for ColorSpace {
+    fn into(self) -> ffi::vpx_color_space_t {
+        match self {
+            ColorSpace::BT601 => ffi::VPX_CS_BT_601,
+            ColorSpace::BT709 => ffi::VPX_CS_BT_709,
+            ColorSpace::SMPTE170 => ffi::VPX_CS_SMPTE_170,
+            ColorSpace::SMPTE240 => ffi::VPX_CS_SMPTE_240,
+            ColorSpace::BT2020 => ffi::VPX_CS_BT_2020,
+            ColorSpace::SRGB => ffi::VPX_CS_SRGB,
+        }
+    }
+}
+
 const IMAGE_ABI_VERSION: i32 = 3;
 pub struct Image<'a>(ffi::vpx_image_t, Format, Cow<'a, [u8]>);
 
@@ -114,6 +137,7 @@ impl<'a> Image<'a> {
     /// XXX this function doesn't check that `data` is long enough for the
     /// format or view size.
     pub fn new(data: Cow<'a, [u8]>, fmt: Format,
+               color_space: ColorSpace,
                width: u32, height: u32,
                stride: u32) -> Image
     {
@@ -124,6 +148,7 @@ impl<'a> Image<'a> {
                               height, stride,
                               data.as_ptr() as *mut _);
         };
+        t.cs = color_space.into();
         Image(t, fmt, data)
     }
 
