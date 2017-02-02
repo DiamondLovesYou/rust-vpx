@@ -15,10 +15,14 @@ pub enum Error {
     Mem,
     AbiMismatch,
     Incapable,
+    /// The bitstream was unable to be parsed at the highest level. The decoder is unable to proceed. This error SHOULD be treated as fatal to the stream.
     UnsupportedBitstream,
+    /// The decoder does not implement a feature required by the encoder. This return code should only be used for features that prevent future pictures from being properly decoded. This error MAY be treated as fatal to the stream or MAY be treated as fatal to the current GOP.
     UnsupportedFrame,
+    /// There was a problem decoding the current frame. This return code should only be used for failures that prevent future pictures from being properly decoded. This error MAY be treated as fatal to the stream or MAY be treated as fatal to the current GOP. If decoding is continued for the current GOP, artifacts may be present.
     CorruptFrame,
     InvalidParam,
+    ListEnd,
 }
 impl From<u32> for Error {
     fn from(v: u32) -> Error {
@@ -30,7 +34,29 @@ impl From<u32> for Error {
             ffi::VPX_CODEC_UNSUP_FEATURE => Error::UnsupportedFrame,
             ffi::VPX_CODEC_CORRUPT_FRAME => Error::CorruptFrame,
             ffi::VPX_CODEC_INVALID_PARAM => Error::InvalidParam,
+            ffi::VPX_CODEC_LIST_END => Error::ListEnd,
             n => Error::Generic(n),
+        }
+    }
+}
+
+impl std::fmt::Display for Error {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+        <Self as std::fmt::Debug>::fmt(self,fmt)
+    }
+}
+impl std::error::Error for Error {
+    fn description(&self) -> &str {
+        match *self {
+            Error::Generic(_) => "Unspecified error",
+            Error::Mem => "Memory operation failed",
+            Error::AbiMismatch => "ABI version mismatch",
+            Error::Incapable => "Algorithm does not have required capability",
+            Error::UnsupportedBitstream => "The given bitstream is not supported",
+            Error::UnsupportedFrame => "Encoded bitstream uses an unsupported feature",
+            Error::CorruptFrame => "The coded data for this stream is corrupt or incomplete",
+            Error::InvalidParam => "An application-supplied parameter is not valid",
+            Error::ListEnd => "An iterator reached the end of list",
         }
     }
 }
