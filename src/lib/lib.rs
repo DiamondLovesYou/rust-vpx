@@ -1,5 +1,3 @@
-#![feature(cstr_to_str)]
-
 use std::borrow::Cow;
 use std::ffi::{CStr};
 use std::mem::transmute;
