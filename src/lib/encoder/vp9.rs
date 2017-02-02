@@ -63,7 +63,7 @@ impl ::Interface for Interface {
                                         self.iface(),
                                         &cfg.0 as *const _,
                                         flags,
-                                        super::ENCODER_ABI_VERSION)
+                                        ffi::VPX_ENCODER_ABI_VERSION as i32)
         };
         if err != ffi::VPX_CODEC_OK {
             Err(From::from(err))

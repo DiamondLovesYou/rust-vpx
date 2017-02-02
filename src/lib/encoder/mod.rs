@@ -5,8 +5,6 @@ use libc;
 
 pub mod vp9;
 
-const ENCODER_ABI_VERSION: i32 = super::CODEC_ABI_VERSION + 5;
-
 pub const DL_REALTIME: u64 = 1;
 pub const DL_GOOD_QUALITY: u64 = 1000000;
 pub const DL_BEST_QUALITY: u64 = 0;
