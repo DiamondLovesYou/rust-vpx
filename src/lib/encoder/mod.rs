@@ -1,5 +1,5 @@
 use ffi;
-use super::{Interface, Error, Frame, Image};
+use super::{Error, Frame, Image};
 
 use libc;
 
