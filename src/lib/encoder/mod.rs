@@ -48,7 +48,7 @@ pub trait Encoder: InternalEncoder
             ffi::vpx_codec_enc_config_set(self.get_mut_ctx(),
                                           cfg.as_ref() as *const _)
         };
-        if res == 0 {
+        if res == ffi::VPX_CODEC_OK {
             Ok(())
         } else {
             Err(From::from(res))
@@ -69,7 +69,7 @@ pub trait Encoder: InternalEncoder
                                   flags.into(),
                                   deadline as libc::c_ulong)
         };
-        if res != 0 {
+        if res != ffi::VPX_CODEC_OK {
             Err(From::from(res))
         } else {
             Ok(())
@@ -89,7 +89,7 @@ pub trait Encoder: InternalEncoder
                                   pts, duration as libc::c_ulong,
                                   flags, deadline as libc::c_ulong)
         };
-        if res == 0 {
+        if res == ffi::VPX_CODEC_OK {
             Ok(())
         } else {
             Err(From::from(res))
