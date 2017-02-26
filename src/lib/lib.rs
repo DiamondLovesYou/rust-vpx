@@ -1,5 +1,3 @@
-#![feature(cstr_to_str)]
-
 use std::borrow::Cow;
 use std::ffi::{CStr};
 use std::mem::transmute;
@@ -156,7 +154,6 @@ impl Into<ffi::vpx_color_space_t> for ColorSpace {
     }
 }
 
-const IMAGE_ABI_VERSION: i32 = 3;
 pub struct Image<'a>(ffi::vpx_image_t, Format, Cow<'a, [u8]>);
 
 impl<'a> Image<'a> {
@@ -246,8 +243,6 @@ impl<'a> From<&'a ffi::Struct_Unnamed6> for Frame<'a> {
         }
     }
 }
-
-const CODEC_ABI_VERSION: i32 = IMAGE_ABI_VERSION + 3;
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub enum Kind {

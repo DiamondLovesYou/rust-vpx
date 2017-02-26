@@ -15,7 +15,7 @@ impl Default for Cfg {
                                               &mut cfg as *mut _,
                                               0)
         };
-        assert_eq!(err, 0);
+        assert_eq!(err, ffi::VPX_CODEC_OK);
         Cfg(cfg)
     }
 }
@@ -63,9 +63,9 @@ impl ::Interface for Interface {
                                         self.iface(),
                                         &cfg.0 as *const _,
                                         flags,
-                                        super::ENCODER_ABI_VERSION)
+                                        ffi::VPX_ENCODER_ABI_VERSION as i32)
         };
-        if err != 0 {
+        if err != ffi::VPX_CODEC_OK {
             Err(From::from(err))
         } else {
             Ok(Context(ctx))
